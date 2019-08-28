@@ -18,9 +18,10 @@ public class Server extends Application {
     private int clientNo = 0;
     TextArea ta = new TextArea();
 
+
     @Override
     public void start(Stage primaryStage) {
-
+        // vores GUI
         Scene scene = new Scene(new ScrollPane(ta), 450, 200);
         primaryStage.setTitle("Server");
         primaryStage.setScene(scene);
@@ -43,7 +44,7 @@ public class Server extends Application {
                         ta.appendText("Client " + clientNo + " host name is " + inetAddress.getHostName() + "\n");
                         ta.appendText("Client " + clientNo + " IP Address is " + inetAddress.getHostAddress() + "\n");
                     });
-
+                    // opretter en ny thread til hver ny client
                     new Thread(new HandleAClient(socket)).start();
                 }
             } catch (IOException e) {
@@ -51,7 +52,7 @@ public class Server extends Application {
             }
         }).start();
     }
-
+    // subclass som håndterer den enkelte client
     class HandleAClient implements Runnable {
         private Socket socket;
 
@@ -63,13 +64,15 @@ public class Server extends Application {
                 DataInputStream inputFromClient = new DataInputStream(socket.getInputStream());
                 DataOutputStream outputToClient = new DataOutputStream(socket.getOutputStream());
 
+
                 while (true) {
-                    // Receive numbers from the client
+                    // Modtager besked fra clienten
                     message = inputFromClient.readUTF();
 
                     Platform.runLater(() -> {
                         ta.appendText("Client: " + message + "\n");
                         try {
+                            // sender beskeden tilbage til clienten
                             outputToClient.writeUTF(message);
                         } catch (IOException e) {
                             e.printStackTrace();
