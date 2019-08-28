@@ -28,7 +28,7 @@ public class Server extends Application {
 
         new Thread( () -> {
             try {
-                ServerSocket serverSocket = new ServerSocket(8001);
+                ServerSocket serverSocket = new ServerSocket(8000);
                 ta.appendText("Server started at " + new Date() + '\n');
 
                 while (true) {
