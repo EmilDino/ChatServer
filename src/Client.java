@@ -11,12 +11,16 @@ import javafx.stage.Stage;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
 
 import static javafx.application.Application.launch;
 
 public class Client extends Application {
     DataOutputStream toServer = null;
     DataInputStream fromServer = null;
+    String message;
+    String serverMessage;
 
     @Override
     public void start(Stage primaryStage) {
@@ -41,6 +45,45 @@ public class Client extends Application {
         primaryStage.setTitle("Client"); // Stage titel
         primaryStage.setScene(scene); // Placer scenen på Stage
         primaryStage.show(); // Viser Stage
+
+        try {
+            Socket socket = new Socket("localhost", 8000);
+            System.out.println("client connected");
+
+
+            // Create an input stream to receive data from the server
+            fromServer = new DataInputStream(socket.getInputStream());
+
+            // Create an output stream to send data to the server
+            toServer = new DataOutputStream(socket.getOutputStream());
+        }
+        catch (IOException ex) {
+            ta.appendText(ex.toString() + '\n');
+        }
+        tf.setOnAction(e -> {
+            try {
+
+                System.out.println("sending");
+                // Get the message from the text field
+                message = (tf.getText().trim());
+
+                // Send the message to the server
+                toServer.writeUTF(message);
+                toServer.flush();
+
+                // Get message from the server
+                serverMessage = fromServer.readUTF();
+
+                // Display to the text area
+                ta.appendText("Server: " + serverMessage + "\n");
+
+                System.out.println("done");
+                tf.clear();
+            }
+            catch (IOException ex) {
+                System.out.println(ex);
+            }
+        });
     }
 
     public static void main(String[] args) {
