@@ -5,6 +5,8 @@ import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
 public class Server extends Application {
+    String message;
+
     @Override
     public void start(Stage primaryStage) {
         TextArea ta = new TextArea();
