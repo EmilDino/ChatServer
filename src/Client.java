@@ -18,6 +18,7 @@ public class Client extends Application {
     DataOutputStream toServer = null;
     DataInputStream fromServer = null;
 
+    @Override
     public void start(Stage primaryStage) {
         BorderPane paneForTextField = new BorderPane();
         paneForTextField.setPadding(new Insets(5, 5, 5, 5));
